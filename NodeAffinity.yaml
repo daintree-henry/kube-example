@@ -1,0 +1,35 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: size
+            operator: In
+            values:
+            - small
+            - medium
+
+
+#다양한 오퍼레이터를 통해 활용 가능
+#In : key의 values 값과 매칭되는 값이 있을 경우
+#Exists : 키가 존재할 경우
+
+#노드 어피니티 조건에 매칭되지 않을 경우 affinit 아래의 속성 에 따라 결정됨
+# requiredDuringSchedulingIgnoredDuringExecution : 스케줄링시 조건에 매칭되는 노드에만 스케줄링 // 파드가 이미 실행 중일 경우 무시
+# preferredDuringSchedulingIgnoredDuringExecution : 스케줄링 시 조건에 매칭되는 노드가 없으면 나머지 노드에 배치 // 파드가 이미 실행 중일 경우 무시
+# requiredDuringSchedulingRequiredDuringExecution: 스케줄링 시 조건에 매칭되는 노드에만 스케줄링 // 파드가 이미 실행중일 경우 조건에 맞는 노드로 이동
+
+# 파드가 원하는 노드를 찾아갈 수 있게 만듬
+# 파드 하나당 레이블을 설정하는 의미가 없음
+
+# **특정 파드가 특정 노드에만 접근할 수 있게 하고 싶을 경우**
+
+# 테인트-톨러레이션과 노드 어피니티를 모두 활용해야 함

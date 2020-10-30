@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+    resources:
+      requests:
+        memory: "1Gi"
+        cpu: 1
+      limits:
+        memory: "2Gi"
+        cpu: 2
+
+# request : 파드가 필요로 하는 최소 리소스
+# https://kubernetes.io/docs/tasks/configure-pod-container/assign-memory-resource/

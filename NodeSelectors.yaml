@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+spec:
+  containers:
+  - name: nginx-container
+    image: nginx
+  nodeSelector:
+    tier: web
+
+#노드 셀렉터 : 레이블이 매칭되는 노드에 파드를 스케줄링
+#노드 레이블링 : kubectl label nodes <node-name> tier=web

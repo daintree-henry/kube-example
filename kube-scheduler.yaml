@@ -1,0 +1,34 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: my-custom-scheduler
+  namespace: kube-system
+spec:
+  containers:
+  - command:
+    - kube-scheduler
+    - --address=127.0.0.1
+    - --kubeconfig=/etc/kubernetes/scheduler.conf
+    - --leader-elect=true
+    - --scheduler-name=my-custom-scheduler
+    - --lock-object-name=my-custom-scheduler
+    image: k8s.gcr.io/kube-scheduler-amd64:v1.11.3
+    name: kube-scheduler
+
+--------------------------
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+  schedulerName: my-custom-scheduler
+
+
+# kubectl get events : 어떤 스케줄러가 작업을 수행했는지 확인
+# kubectl logs my-custom-scheduler -n kube-system
+
+# 기본 스케줄러 yaml파일의 위치 : controlplane 노드의 /etc/kubernetes/manifest
