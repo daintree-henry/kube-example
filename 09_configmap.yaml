@@ -1,0 +1,48 @@
+# 문자열로 configmap 생성
+#kubectl create configmap <config-name> --from-literal=<key>=<value>
+# > kubectl create configmap app-config --from-literal=APP_COLOR=blue  --from-literal=APP_MOD=prod
+
+# 파일을 통해 configmap생성
+#kubectl create configmap <config-name> --from-file=<path-to-file>
+# > kubectl create configmap app-config --from-file=app_config.properties
+
+# yaml파일로 생성
+# kubectl create -f config-map.yaml
+
+apiVerison: v1
+kind: configmap
+metadata:
+  name: app-config
+data:
+  APP_COLOR: blue
+  APP_MODE: prod
+
+---
+#환경변수를 적용하는 방법은 3가지가 있다
+#변수값을 담은 configmap을 지정
+#변수값을 yaml에 직접 지정
+#변수값이 있는 볼륨을 지정
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: simple-webapp-color
+spec:
+  containers:
+  - name: simple-webapp-color
+    image: simple-webapp-color
+    ports:
+      - containerPort: 8080
+    volumes:
+    - name: app-config-volume
+      configMap:
+        name: app-config
+    env:
+      - name: APP_COLOR
+        valueFrom:
+          configMapKeyRef:
+            name: app-config
+            key: APP_COLOR
+    envFrom:
+      - configMapRef:
+          name: app-config
