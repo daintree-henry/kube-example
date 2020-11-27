@@ -1,0 +1,11 @@
+#업그레이드 전략은 Recreate, RollingUpdate가 있다.
+#Recreate : 전체 파드 제거 후 재시작 - 다운타임 있음
+#RollingUpdate : 한 개씩 대체 - 다운타임 없음
+
+
+#kubectl rollout status deployment/myapp-deployment
+#kubectl rollout history deployment/myapp-deployment
+
+#kubectl set image deployment/myapp-deployment nginx=nginx:1.9.1 <- 이미지를 대체함으로써 디플로이먼트의 버전 변경
+
+#kubectl rollout undo deployment/myapp-deployment
