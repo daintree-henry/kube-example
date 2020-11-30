@@ -33,3 +33,15 @@
 
 #weave 플러그인 배포
 #kubectl apply -f "https://cloud.weave.works/k8s/net?k8s-version=$(kubectl version | base64 | tr -d '\n')"
+
+#파드 네트워크의 IP 범위 확인 방법
+#kubectl logs <weave-pod-name> weave -n kube-system | grep ipalloc-range
+
+#서비스의 IP할당범위 확인 방법
+#cat /etc/kubernetes/manifests/kube-apiserver.yaml | grep cluster-ip-range
+
+#kube-proxy 파드가 사용하는 proxy 타입 확인방법
+#kubectl logs kube-proxy-ft6n7 -n kube-system | grep Using
+
+#CoreDNS 구성 파일 위치 확인
+#kubectl -n kube-system describe deployments.apps coredns | grep -A2 Args | grep Corefile

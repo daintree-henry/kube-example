@@ -22,3 +22,14 @@ spec:
     requests:
       storage: 50Mi
 
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: pv-analytics
+spec:
+  accessModes:
+    - ReadWriteMany
+  capacity:
+    storage: 100Mi
+  hostPath:
+    path: /pv/data-analytics
