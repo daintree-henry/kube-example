@@ -1,0 +1,42 @@
+# kubectl drain <node> 스케줄링 금지 및 내부의 모든 파드를 다른 노드로 이동
+ 
+# kubectl cordon <node> 스케줄링 금지
+# kubectl uncordon <node> 스케줄링 금지 해제
+ 
+# kubectl get nodes > 버전 조회
+#  v1{메이저}.11{마이너}.3{패치}
+ 
+
+# 업데이트 과정
+# 마스터 -> 워커 순으로 진행
+# API와 스케줄러 잠시 다운 -> 마스터 업그레이드 후 전략에 따라 워커노드 업그레이드
+# 1.전체 노드 한번에 업그레이드 - 다운타임
+# 2.한번에 하나의 노드 업그레이드
+# 3.새로운 버전의 노드 추가 
+
+# apt-get upgrade -y kubeadm={newversion}
+# kubeadm upgrade plan
+# kubeadm upgrade apply
+
+
+# 워커노드 업데이트 전략
+# kubectl drain node-1
+# apt-get upgrade -y kubeadm={newversion}
+# apt-get upgrade -y kubelet={newversion}
+# kubeadm upgrade node config --kubelet-version {newversion}
+# systemctl restart kubelet
+# kubectl uncordon node-1
+
+
+# ------------- 백업 -----------------
+# 리소스 정보 백업 : kubectl get all --all-namespaces -o yaml > all-deploy-services.yaml
+
+# ETCD 백업 : 스냅샷 사용 
+# etcdctl snapshot save snapshot.db
+# service kube-apiserver stop
+# etcdctl snapshot restore snapshot.db \
+# --data-dir /var/lib/etcd-from-backup \
+# --initial-cluster master-1=https://{IP}:2380,master-2=https://{IP}:2380 \
+# --initial-cluster-token etcd-cluster-1 \
+# --initial-advertise-peer-urls https://${INTERNAL_IP}:2380
+# ...
