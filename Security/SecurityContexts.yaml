@@ -29,3 +29,22 @@ spec:
     securityContext:
       capabilities:
         add: ["SYS_TIME"]
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multi-pod
+spec:
+  securityContext:
+    runAsUser: 1001
+  containers:
+  -  image: ubuntu
+     name: web
+     command: ["sleep", "5000"]
+     securityContext:
+      runAsUser: 1002             #1 002로 시작
+
+  -  image: ubuntu
+     name: sidecar
+     command: ["sleep", "5000"]   # 1001로 시작
