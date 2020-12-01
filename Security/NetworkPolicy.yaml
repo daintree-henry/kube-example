@@ -1,0 +1,49 @@
+#kubectl get networkpolicy
+Name:         payroll-policy
+Namespace:    default
+Created on:   2020-11-27 05:57:35 +0000 UTC
+Labels:       <none>
+Annotations:  <none>
+Spec:
+  PodSelector:     name=payroll
+  Allowing ingress traffic:
+    To Port: 8080/TCP
+    From:
+      PodSelector: name=internal
+  Not affecting egress traffic
+  Policy Types: Ingresss
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: internal-policy
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      name: internal
+  policyTypes:
+  - Egress
+  - Ingress
+  ingress:
+    - {}
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          name: mysql
+    ports:
+    - protocol: TCP
+      port: 3306
+  - to:
+    - podSelector:
+        matchLabels:
+          name: payroll
+    ports:
+    - protocol: TCP
+      port: 8080
+  - ports:
+    - port: 53
+      protocol: UDP
+    - port: 53
+      protocol: TCP

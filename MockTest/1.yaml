@@ -1,0 +1,24 @@
+############ 문서 조회 #########
+# kubectl explain pv --recursive | less
+
+# 파드 생성
+# kubectl run nginx-pod --image=nginx:alpine
+# kubectl run messaging --image=redis:alpine -l tier=msg
+
+# static 파드 생성
+# kubectl run static-busybox --image=busybox --command sleep 1000 --dry-run=clien -o yaml > static-busybox.yaml
+# cd /var/lib/kubelet
+# grep -i staticPod config.yaml -> /staticPodPath: /etc/kubernetes/manifests
+# mv static-busybox.yaml /etc/kubernetes/manifests
+
+# 서비스 생성
+# kubectl expose pod messaging --name messaging-service --port 6379 --target-port 6379
+# kubectl expose deployment hr-web-app --name hr-web-app-service --type=NodePort --port 8080 --target-port 8080
+
+# 디플로이먼트 생성
+# kubectl create deployment hr-web-app --image=kodekloud/webapp-color
+# kubectl scale deployment hr-web-app --replicas=2
+
+# json 정보 출력
+# kubectl get nodes -o json > /opt/~
+# kubectl get nodes -o jsonpath='{.items[*].status.nodeInfo.osImage'
