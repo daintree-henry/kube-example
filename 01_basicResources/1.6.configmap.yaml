@@ -16,27 +16,27 @@ metadata:
 data:
   APP_COLOR: blue
   APP_MODE: prod
-
 ---
 #환경변수를 적용하는 방법은 3가지가 있다
 #변수값을 담은 configmap을 지정
 #변수값을 yaml에 직접 지정
-#변수값이 있는 볼륨을 지정
+#변수값이 있는 볼륨을 지정 : 구성 파일을 지정할 때, 마운트 폴더에 key는 파일명, value는 파일 내용으로 생성됨
 
 apiVersion: v1
 kind: Pod
 metadata:
   name: simple-webapp-color
 spec:
+  volumes:
+  - name: app-config-volume
+    configMap:
+      name: app-config
   containers:
   - name: simple-webapp-color
     image: simple-webapp-color
-    ports:
-      - containerPort: 8080
-    volumes:
-    - name: app-config-volume
-      configMap:
-        name: app-config
+    volumeMounts:
+      - name: app-config
+        path: /app/config
     env:
       - name: APP_COLOR
         valueFrom:

@@ -1,13 +1,21 @@
+#네임스페이스 생성
+#kubectl create namespace dev
+#노드 레이블링
+#kubectl labels node {노드명} ram=large 
+
 apiVersion: v1
 kind: Pod
 metadata:
   labels:
-    run: daintree
-  name: daintree
-  namespace: default
+    tier: web
+  name: web
+  namespace: dev #네임스페이스 지정
 spec:
+  nodeSelector:
+    ram: large
   containers:
-  - image: busybox
-    name: daintree
-    resources: {}
-
+  - image: dainforest/testweb
+    tier: web
+    ports: #기본적으로 모든 포트 개방, 아래 내용은 단순 기록용
+    - containerPort: 8080
+      protocal: TCP

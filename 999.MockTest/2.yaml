@@ -10,6 +10,7 @@
 
 # 리소스 상세 요구사항 파드 작성
 # kubectl run elephant --image=redis --dry-run -o yaml > elephant.yaml
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -30,6 +31,7 @@ spec:
 status: {}
 
 #SYS_TIME 권한이 있는 컨테이너 작성 (security-context)
+---
 apiVersion: v1
 kind: Pod
 metadata:
@@ -44,6 +46,7 @@ spec:
       capabilities:
         add: ["SYS_TIME"]
 
+---
 #PV에 PVC 연결
 kind: PersistentVolumeClaim
 apiVersion: v1
@@ -55,6 +58,7 @@ spec:
   resources:
     requests:
       storage: 10Mi
+
 ---
 apiVersion: v1
 kind: Pod
@@ -86,7 +90,7 @@ spec:
 #csr 생성
 
 # cat john.csr | base64 | tr -d "\n"
-
+---
 apiVersion: certificates.k8s.io/v1
 kind: CertificateSigningRequest
 metadata:
